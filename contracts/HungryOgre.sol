@@ -226,9 +226,8 @@ points = 4;
 points = 6;
 } else if (_mushrooms >= 1, _berries == 1, _meat ==1) {
 points = 10;
-} else if (_mushrooms == 0, _berries >= 1, _meat >=1) { {
+} else if (_mushrooms == 0, _berries >= 1, _meat >=1) {
 points = 8;
-}
 }
 function burn_food(uint _mushrooms, uint _berries, uint _meat, uint _points) {
 if (points >= 1)
@@ -242,14 +241,12 @@ if (points >= 1)
         function burn _meat(amount: uint256)
         amount: uint256: 1000000000000000000
 }
-
-}
 }
 function multiplier_points_by_level(uint _points, uint level) internal pure returns (uint points) {
 if (level == 0) {
 return _points;
-}else{
-points = _points * level;
+}
+else{points = _points * level;
 }
 }
 
