@@ -213,45 +213,36 @@ ogre_population -= 1;
 
 /*PARLAY MECHANISM */
 
-function food_on_hero(uint _mushrooms, uint _berries, _meat) internal pure returns (uint points) {
+function food_on_hero(uint _mushrooms, uint _berries, uint _meat) internal pure returns (uint points) {
 if (_mushrooms >= 1, _berries == 0, _meat ==0) {
 points = 1;
-    function burn _mushrooms(amount: uint256)
-    amount: uint256: 1000000000000000000
 } else if (_mushrooms == 0, _berries >= 1, _meat ==0) {
 points = 2;
-    function burn berries(amount: uint256)
-    amount: uint256: 1000000000000000000
 } else if (_mushrooms == 0, _berries == 0, _meat >=1) {
 points = 4;
-    function burn _meat(amount: uint256)
-    amount: uint256: 1000000000000000000
 } else if (_mushrooms >= 1, _berries >= 1, _meat ==0) {
 points = 4;
-    function burn _mushrooms(amount: uint256)
-    amount: uint256: 1000000000000000000
-    function burn _berries(amount: uint256)
-    amount: uint256: 1000000000000000000
 } else if (_mushrooms >= 1, _berries == 0, _meat >=1) {
 points = 6;
-    function burn _mushrooms(amount: uint256)
-    amount: uint256: 1000000000000000000
-    function burn _meat(amount: uint256)
-    amount: uint256: 1000000000000000000
 } else if (_mushrooms >= 1, _berries == 1, _meat ==1) {
 points = 10;
-    function burn _mushrooms(amount: uint256)
-    amount: uint256: 1000000000000000000
-    function burn _berries(amount: uint256)
-    amount: uint256: 1000000000000000000
-    function burn _meat(amount: uint256)
-    amount: uint256: 1000000000000000000
 } else if (_mushrooms == 0, _berries >= 1, _meat >=1) { {
 points = 8;
-    function burn _meat(amount: uint256)
-    amount: uint256: 1000000000000000000
-    function burn _berries(amount: uint256)
-    amount: uint256: 1000000000000000000
+}
+}
+function burn_food(uint _mushrooms, uint _berries, uint _meat, uint _points) {
+if (points >= 1)
+        if (_mushrooms >=1)
+        function burn _mushrooms(amount: uint256)
+        amount: uint256: 1000000000000000000
+        if (_berries >=1)
+        function burn berries(amount: uint256)
+        amount: uint256: 1000000000000000000
+        if (_meat >=1)
+        function burn _meat(amount: uint256)
+        amount: uint256: 1000000000000000000
+}
+
 }
 }
 function multiplier_points_by_level(uint _points, uint level) internal pure returns (uint points) {
