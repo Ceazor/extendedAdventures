@@ -1,6 +1,6 @@
 pragma solidity ^0.4.0;
 
-contract Hungry Ogre {
+contract HungryOgre {
 function Hungry_Ogre(){
 
 // SPDX-License-Identifier: MIT
@@ -16,7 +16,7 @@ import "./interfaces/boarAdventure.sol"; //this needs to be checked we will use 
 
 contract hungryOgreAdventure {
 
-int public constant dungeon_health = 22;
+int public constant dungeon_health = 22; // much much harder to kill,, better to talk to him
 int public constant dungeon_damage = 6;
 int public constant dungeon_to_hit = 3;
 int public constant dungeon_armor_class = 3;
@@ -32,6 +32,7 @@ IrERC20 public mushroom;
 IrERC20 public berries;
 IrERC20 public meat;
 
+// new loot.. can i put these in loot.sol.. didn't think so, so i put them in ogreloot.sol
 enum RewardParlay {
 None,
 PrettyRock,
@@ -64,6 +65,8 @@ return rm.getApproved(_summoner) == msg.sender || rm.ownerOf(_summoner) == msg.s
 }
 
 /*KILL MECHANISM */
+
+// all this is unchanged except some fo the loot stuff at the end
 
 function health_by_class(uint _class) internal pure returns (uint health) {
 if (_class == 1) {
@@ -167,7 +170,7 @@ return RewardKill(res);
 }
 
 function mint_reward_kill(uint receiver, uint qty, RewardKill reward) internal {
-if (reward == RewardKill.GoblinToe) {
+if (reward == RewardKill.GoblinToe) {   //here are the new rewards, not sure how to make them rarer. i think they are random
 GoblinToe.mint(receiver, qty);
 }
 
@@ -202,7 +205,7 @@ if (_health <= 0) {return (0, RewardKill.None);}
 }
 
 function kill(uint _summoner) external returns (uint reward, RewardKill reward_type) {
-require(ogre_population > 0, "no orges to kill");
+require(ogre_population > 0, "no ogres to kill");
 require(_isApprovedOrOwner(_summoner));
 require(block.timestamp > actions_log[_summoner]);
 actions_log[_summoner] = block.timestamp + DAY;
@@ -212,6 +215,8 @@ ogre_population -= 1;
 }
 
 /*PARLAY MECHANISM */
+
+// idea here is that we can feed him to call his friends and give us loot
 
 function food_on_hero(uint _mushrooms, uint _berries, uint _meat) internal pure returns (uint points) {
 if (_mushrooms >= 1, _berries == 0, _meat ==0) {
@@ -229,6 +234,9 @@ points = 10;
 } else if (_mushrooms == 0, _berries >= 1, _meat >=1) {
 points = 8;
 }
+
+// this is me hoping to burn some of the food.. to keep the ogre population down.
+
 function burn_food(uint _mushrooms, uint _berries, uint _meat, uint _points) {
 if (points >= 1)
         if (_mushrooms >=1)
@@ -250,7 +258,7 @@ else{points = _points * level;
 }
 }
 
-// skill checks
+// skill checks that can make the meal more pleasant and get you some more loot
 
 function bonus_by_bluff(uint _points, uint _summoner) internal view returns (uint points) {
 uint8[36] memory _skills = skills.get_skills(_summoner);
@@ -278,26 +286,28 @@ uint speak_language = _skills[29];
 points = _points + (speak_language * 3);
 }
 
+// just charm the ogre with your good looks and silver tongue.
+
 function bonus_by_attr(uint _points, uint _summoner) internal view returns (uint points) {
 (,,,uint32 _cha) = attr.ability_scores(_summoner);
 points = _points + ((_cha) / 2);
 }
 
-function mint_reward_reproduce(uint receiver, uint qty, RewardReproduce reward) internal {
-if (reward == RewardReproduce.PrettyRock) {
-PrettyRock.mint(receiver, qty);
+// get some rewards for your niceties.
+
+function mint_reward_feed(uint receiver, uint qty, RewardFeed reward) internal {
+if (reward == RewardFeed.PrettyRock) {
+PrettyRock.mint(receiver, 1); // I hope this makes them get 1 of these, not their points
+}
+if (reward == RewardFeed.Topaz) {
+Topaz.mint(receiver, 1);
+}
+if (reward == RewardFeed.OgreMap) {
+OgreMap.mint(receiver, 1);
+}
 }
 
-if (reward == RewardReproduce.Topaz) {
-Topaz.mint(receiver, qty);
-}
-
-if (reward == RewardReproduce.OgreMap) {
-OgreMap.mint(receiver, qty);
-}
-}
-
-function simulate_reproduce(uint _summoner) public view returns (uint reward) {
+function simulate_feed(uint _summoner) public view returns (uint reward) {
 uint _level = rm.level(_summoner);
 uint _class = rm.class(_summoner);
 reward = multiplier_points_by_level(reward, _level);
@@ -309,12 +319,12 @@ reward = bonus_by_speak_language(reward, _summoner);
 reward = bonus_by_attr(reward, _summoner);
 }
 
-function reproduce(uint _summoner, RewardReproduce expected_reward) external returns (uint reward) {
+function feed(uint _summoner, RewardFeed expected_reward) external returns (uint reward) {
 require(_isApprovedOrOwner(_summoner));
 require(block.timestamp > actions_log[_summoner]);
 actions_log[_summoner] = block.timestamp + DAY;
-(reward) = simulate_reproduce(_summoner);
-mint_reward_reproduce(_summoner, reward, expected_reward);
+(reward) = simulate_feed(_summoner);
+mint_reward_feed(_summoner, reward, expected_reward);
 ogre_population += 1;
 }
 }
